@@ -54,7 +54,9 @@ impl<K: Eq + Hash + Clone, V> ExpiringHashMap<K, V> {
     }
 
     pub fn cleanup(&mut self) {
-        let deadline = Instant::now() - self.duration;
+        let Some(deadline) = Instant::now().checked_sub(self.duration) else {
+            return;
+        };
         while let Some(HeapValue { instant, .. }) = self.heap.peek() {
             if *instant > deadline {
                 return;
