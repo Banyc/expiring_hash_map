@@ -77,10 +77,10 @@ impl<K: Eq + Hash + Clone, V> ExpiringHashMap<K, V> {
         }
     }
 
-    pub fn get<Q: ?Sized>(&mut self, key: &Q) -> Option<&V>
+    pub fn get<Q>(&mut self, key: &Q) -> Option<&V>
     where
         K: Borrow<Q>,
-        Q: Eq + std::hash::Hash,
+        Q: ?Sized + Eq + std::hash::Hash,
     {
         self.cleanup();
         match self.hash_map.get_mut(key) {
@@ -92,10 +92,10 @@ impl<K: Eq + Hash + Clone, V> ExpiringHashMap<K, V> {
         }
     }
 
-    pub fn get_mut<Q: ?Sized>(&mut self, key: &Q) -> Option<&mut V>
+    pub fn get_mut<Q>(&mut self, key: &Q) -> Option<&mut V>
     where
         K: Borrow<Q>,
-        Q: Eq + std::hash::Hash,
+        Q: ?Sized + Eq + std::hash::Hash,
     {
         self.cleanup();
         match self.hash_map.get_mut(key) {
@@ -107,10 +107,10 @@ impl<K: Eq + Hash + Clone, V> ExpiringHashMap<K, V> {
         }
     }
 
-    pub fn remove<Q: ?Sized>(&mut self, k: &Q) -> Option<V>
+    pub fn remove<Q>(&mut self, k: &Q) -> Option<V>
     where
         K: Borrow<Q>,
-        Q: Eq + std::hash::Hash,
+        Q: ?Sized + Eq + std::hash::Hash,
     {
         self.hash_map.remove(k).map(|(_time, value)| value)
     }
